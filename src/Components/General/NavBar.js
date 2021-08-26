@@ -5,9 +5,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import { red } from "@material-ui/core/colors";
-import { useState, useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,10 +26,6 @@ const useStyles = makeStyles((theme) => ({
   toDoListStyle: {
     marginLeft: "2vw",
   },
-  // tomeyaImageStyle: {
-  //   width: "2vw",
-  //   height: "2vw",
-  // },
 }));
 
 export default function NavBar(props) {
@@ -62,7 +55,6 @@ export default function NavBar(props) {
           <Typography variant="h6" className={classes.title}>
             To-Meya
           </Typography>
-          {/* <img image="tomeya.png" className={classes.tomeyaImageStyle} /> */}
           <Button color="inherit" onClick={handleHome}>
             Home
           </Button>
