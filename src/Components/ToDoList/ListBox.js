@@ -9,6 +9,17 @@ import IconButton from "@material-ui/core/IconButton";
 import RemoveIcon from "@material-ui/icons/Remove";
 import Input from "@material-ui/core/Input";
 import AddIcon from "@material-ui/icons/Add";
+let counter = 1;
+let count = [
+  {
+    isDone: true,
+    name: "Todo 1",
+  },
+  {
+    isDone: false,
+    name: "Todo 1",
+  },
+];
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -19,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// {   count.map(function(item, i){
+
+// })}
 export default function ListBox() {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([0]);
@@ -39,7 +53,11 @@ export default function ListBox() {
 
   const handleAddNewItem = () => {
     setNewItem(!newItem);
-    //  console.log(newItem);
+
+    counter = counter + 1;
+    count.push(counter);
+    console.log(counter);
+    console.log(newItem);
   };
 
   return (
@@ -49,41 +67,46 @@ export default function ListBox() {
 
         return (
           <>
-            {newItem ? (
-              <ListItem
-                key={value}
-                role={undefined}
-                dense
-                button
-                onClick={handleToggle(value)}
-              >
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={checked.indexOf(value) !== -1}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ "aria-labelledby": labelId }}
-                  />
-                </ListItemIcon>
+            {count.map((elem) => {
+              return (
+                <>
+                  <ListItem
+                    key={value}
+                    role={undefined}
+                    dense
+                    button
+                    onClick={handleToggle(value)}
+                  >
+                    <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        checked={checked.indexOf(value) !== -1}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ "aria-labelledby": labelId }}
+                      />
+                    </ListItemIcon>
 
-                <Input
-                  placeholder="e.g feed the dog"
-                  inputProps={{ "aria-label": "description" }}
-                />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="delete">
-                    <RemoveIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ) : (
-              <div />
-            )}
+                    <Input
+                      placeholder="e.g feed the dog"
+                      inputProps={{ "aria-label": "description" }}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" aria-label="delete">
+                        <RemoveIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+
+                  {/* <input type="checkbox" checked={elem.isDone ? true : false} />
+                  <p>{elem.name}</p> */}
+                </>
+              );
+            })}
             <ListItem>
               <IconButton
                 color="secondary"
-                aria-label="add an alarm"
+                aria-label="add an item"
                 className={classes.top}
                 onClick={handleAddNewItem}
               >
