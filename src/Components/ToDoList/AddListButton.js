@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   top: {
-    marginTop: "36vw",
-    marginLeft: "90vw",
+    marginTop: "16vw",
+    marginLeft: "87vw",
   },
 }));
 
