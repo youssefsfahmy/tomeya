@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
-
+import ListScroller from "./ListScroller";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 const useStyles = makeStyles((theme) => ({
@@ -16,8 +16,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddListButton() {
+export default function AddListButton(props) {
   const classes = useStyles();
+
+  const handleAddListButton = () => {
+    props.setaddListButton(true);
+  };
 
   return (
     <div className={classes.root}>
@@ -25,6 +29,7 @@ export default function AddListButton() {
         color="secondary"
         aria-label="add an alarm"
         className={classes.top}
+        onClick={handleAddListButton}
       >
         <AddCircleIcon style={{ fontSize: 60 }} />
       </IconButton>
