@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ListBox() {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([0]);
-  const [newItem, setNewItem] = React.useState(false);
+  const [newItem, setNewItem] = React.useState(true);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -39,7 +39,6 @@ export default function ListBox() {
 
   const handleAddNewItem = () => {
     setNewItem(!newItem);
-    //  console.log(newItem);
   };
 
   return (
@@ -80,10 +79,11 @@ export default function ListBox() {
             ) : (
               <div />
             )}
+
             <ListItem>
               <IconButton
                 color="secondary"
-                aria-label="add an alarm"
+                aria-label="add an item"
                 className={classes.top}
                 onClick={handleAddNewItem}
               >
