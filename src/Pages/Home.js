@@ -1,4 +1,4 @@
-import React, {  useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Buttons from "../Components/Home/Buttons";
 import { useHistory } from "react-router";
 
