@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import ToDoList from "./Pages/ToDoList";
@@ -11,6 +11,7 @@ import NavBar from "./Components/General/NavBar";
 function App() {
   return (
     <BrowserRouter>
+      <Link to="/home"> Home</Link>;
       <NavBar />
       <Switch>
         <Route path="/home" component={Home} exact />
