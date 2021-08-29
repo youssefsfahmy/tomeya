@@ -13,15 +13,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "16vw",
     marginLeft: "87vw",
   },
-  color: {
-    color: "#cebbaf",
-  },
 }));
 
-export default function AddListButton(props) {
+export default function AddNewNotecard(props) {
   const classes = useStyles();
 
-  const handleAddListButton = () => {
+  const handleAddNotecardButton = () => {
     props.setaddListButton(true);
   };
 
@@ -31,9 +28,9 @@ export default function AddListButton(props) {
         color="secondary"
         aria-label="add an alarm"
         className={classes.top}
-        onClick={handleAddListButton}
+        onClick={handleAddNotecardButton}
       >
-        <AddCircleIcon style={{ fontSize: 60 }} className={classes.color} />
+        <AddCircleIcon style={{ fontSize: 60 }} />
       </IconButton>
     </div>
   );

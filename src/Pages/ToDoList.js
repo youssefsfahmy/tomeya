@@ -8,12 +8,12 @@ export default function ToDoList() {
   return (
     <div>
       <Scroll />
+      {addListButton ? <p> jhgjug </p> : <div />}
+      <ListBox />
       <AddListButton
         setaddListButton={setaddListButton}
         addListButton={addListButton}
       />
-      {addListButton ? <p> jhgjug </p> : <div />}
-      <ListBox />
     </div>
   );
 }
