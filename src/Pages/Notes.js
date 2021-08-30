@@ -5,7 +5,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import tom from "./tomeyaa-03.png";
 
 const useStyles = makeStyles({
-  background: {
+  // background: {
+  //   backgroundImage: `url(${tom})`,
+  // },
+  root: {
+    width: "100vw",
+    height: "150vw",
     backgroundImage: `url(${tom})`,
   },
 });
@@ -36,7 +41,7 @@ export default function Notes() {
     setNotesArray(temp);
   };
   return (
-    <div className={classes.background}>
+    <div className={classes.root}>
       <div
         className={classes.background}
         style={{ width: "100vw", justifyContent: "center", display: "flex" }}

@@ -19,8 +19,8 @@ const BootstrapButton = withStyles({
     padding: "6vw 12vw",
     border: "1vw solid",
     lineHeight: 1.5,
-    backgroundColor: "#0063cc",
-    borderColor: "#0063cc",
+    backgroundColor: "#f5f3f4",
+    borderColor: "#f5f3f4",
     fontFamily: [
       "-apple-system",
       "BlinkMacSystemFont",
@@ -34,17 +34,20 @@ const BootstrapButton = withStyles({
       '"Segoe UI Symbol"',
     ].join(","),
     "&:hover": {
-      backgroundColor: "#0069d9",
-      borderColor: "#0062cc",
+      backgroundColor: "#f5f3f4",
+      borderColor: "#f5f3f4",
       boxShadow: "none",
     },
     "&:active": {
       boxShadow: "none",
-      backgroundColor: "#0062cc",
-      borderColor: "#005cbf",
+      backgroundColor: "#f5f3f4",
+      borderColor: "#f5f3f4",
     },
     "&:focus": {
       boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
+    },
+    list: {
+      marginLeft: "6vw",
     },
   },
 })(Button);
@@ -61,8 +64,26 @@ const ColorButton = withStyles((theme) => ({
 
 const useStyles = makeStyles((theme) => ({
   margin: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(0.3),
+    height: "3vw",
+    width: "10vw",
+    // margin-left: 41vw;
+    padding: "0vw",
+    marginLeft: "5vw",
+    // marginLeft: "35vw",
   },
+  // do: {
+  //   height: "3vw",
+  //   width: "10vw",
+  //   // margin-left: 41vw;
+  //   padding: "0vw",
+  //   marginLeft: "35vw",
+  // },
+  // big: {
+  //   margin: theme.spacing(0.3),
+  //   height: "3vw",
+  //   width: "10vw",
+  // },
 }));
 
 const theme = createTheme({
@@ -75,29 +96,32 @@ export default function Buttons(props) {
   const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.big}>
       <ColorButton
+        className={classes.do}
         onClick={() => {
           props.setButton(1);
+        }}
+        variant="contained"
+        color="#e9e3e6"
+        // className={classes.margin}
+        className={classes.margin}
+      >
+        To-do List
+      </ColorButton>
+      {/* <ThemeProvider theme={theme}> */}
+      <Button
+        className={classes.list}
+        onClick={() => {
+          props.setButton(0);
         }}
         variant="contained"
         color="#eaddd6"
         className={classes.margin}
       >
-        To-do List
-      </ColorButton>
-      <ThemeProvider theme={theme}>
-        <Button
-          onClick={() => {
-            props.setButton(0);
-          }}
-          variant="contained"
-          color="#eaddd6"
-          className={classes.margin}
-        >
-          Notes
-        </Button>
-      </ThemeProvider>
+        Notes
+      </Button>
+      {/* </ThemeProvider> */}
     </div>
   );
 }

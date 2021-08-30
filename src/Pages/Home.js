@@ -6,7 +6,7 @@ import { classes } from "istanbul-lib-coverage";
 
 const useStyles = makeStyles({
   title: {
-    fontSize: "5vw",
+    fontSize: "4vw",
     margintop: "7vw",
     marginLeft: "5vw",
   },
@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1 className={classes.title}>Hey xxx/xx!</h1>
+      <h1 className={classes.title}>Hey Nour!</h1>
 
       <h2 className={classes.left}>What is TO-meya ?</h2>
       <div className={classes.prag}>
@@ -43,7 +43,7 @@ export default function Home() {
         It's ideal for quick note-taking on the go, anyone who appreciates
         simple, fast note-taking tools or to-do apps, <br /> or for saving notes
         that you know you'll need, like shopping lists, addresses, phone
-        numbers, checklists and to-do lists, or conference call codes.
+        numbers, checklists and <br /> to-do lists, or conference call codes.
         <br />
         <br />
       </div>
@@ -58,7 +58,7 @@ export default function Home() {
         numbers, checklists and to-do lists, or conference call codes.
         <br /> */}
         <br />
-        <h2 className={classes.left}>Now, Lets organize your thoughts!</h2>
+        <h2 className={classes.left}>Now, lets organize your thoughts!</h2>
         <br />
         <br />
       </p1>
