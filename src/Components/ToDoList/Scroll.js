@@ -15,7 +15,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Scroll() {
+export default function Scroll(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -23,7 +23,7 @@ export default function Scroll() {
     bottom: false,
     right: false,
   });
-
+  const [object, setObject] = React.useState(props.input);
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event &&
@@ -45,7 +45,7 @@ export default function Scroll() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <ListScroller />
+      <ListScroller object={object} />
     </div>
   );
 

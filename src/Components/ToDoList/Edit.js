@@ -47,8 +47,11 @@ const useStyles = makeStyles((theme) => ({
 // {   count.map(function(item, i){
 
 // })}
-export default function ListBox(props) {
+export default function Edit(props) {
   const classes = useStyles();
+  const [title, setTitle] = React.useState(props.input.name);
+  const [lists, setLists] = React.useState(props.input.lists);
+
   const [checked, setChecked] = React.useState([0]);
   const [newItem, setNewItem] = React.useState(false);
   const [listItem, setlistItem] = React.useState("");
@@ -81,6 +84,13 @@ export default function ListBox(props) {
   };
   const onChangeNames = (e) => {
     props.setname(e.target.value);
+    // const current = props.listNames.concat(name);
+    // props.setListNames(current);
+    // console.log(props.listNames);
+    //console.log(props.input);
+    // props.setListNames(props.listNames.push("asdf"));
+    // console.log(props.listNames);
+    // props.setListNames(props.listNames.concat([name]));
   };
   const onChangeList = (e) => {
     setlistItem(e.target.value);
@@ -96,7 +106,7 @@ export default function ListBox(props) {
             placeholder="Enter your to-do list name"
             inputProps={{ "aria-label": "description" }}
             onChange={onChangeNames}
-            value={props.name}
+            value={title}
           />
         </form>
 
@@ -106,7 +116,7 @@ export default function ListBox(props) {
 
             return (
               <>
-                {props.count.map((elem) => {
+                {lists.map((e) => {
                   return (
                     <>
                       <ListItem
@@ -130,6 +140,7 @@ export default function ListBox(props) {
                           placeholder="e.g feed the dog"
                           inputProps={{ "aria-label": "description" }}
                           onChange={onChangeList}
+                          value={e}
                         />
                         <ListItemSecondaryAction>
                           <IconButton edge="end" aria-label="delete">
