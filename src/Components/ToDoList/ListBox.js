@@ -5,6 +5,9 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Checkbox from "@material-ui/core/Checkbox";
+import ListItemText from "@material-ui/core/ListItemText";
+import Button from "@material-ui/core/Button";
+import {useEffect} from "react";
 import IconButton from "@material-ui/core/IconButton";
 import RemoveIcon from "@material-ui/icons/Remove";
 import Input from "@material-ui/core/Input";
@@ -28,8 +31,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "0vw",
   },
   root2: {
+    
     width: "30vw",
     textAlign: "center",
+    marginLeft:"30vw"
   },
   bullet: {
     display: "inline-block",
@@ -50,43 +55,82 @@ const useStyles = makeStyles((theme) => ({
 export default function ListBox(props) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([0]);
-  const [newItem, setNewItem] = React.useState(false);
-  const [listItem, setlistItem] = React.useState("");
+
+ // console.log(props.arrayOfTodo[props.index].title);
+  const [item, setItem] = React.useState("");
+  //console.log(props.selected.title)
+  const [title, setTitle] = React.useState("");
+  console.log(title)
+    const [list, setList] = React.useState([]);
+  //  if(!(props.index==100)){
+  // setTitle(props.arrayOfTodo[props.index].title);
+  //  setList(props.arrayOfTodo[props.index].list);}
+
+  function handleTitle(e) {
+    
+    setTitle(e.target.value);
+    
+  }
+
+  function handleItem(e) {
+    setItem(e.target.value);
+  }
+  function handleAddItem() {
+    setItem("");
+    setList(list.concat({ detail: item, checked: false }));
+  }
   const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    var currentIndex = list.indexOf(value);
+    const newList = [...list];
+    var currentItem = newList[currentIndex];
+    currentItem.checked = !currentItem.checked;
+    newList.splice(currentIndex, 1, currentItem);
+    setChecked(newList);
+  };
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
+  function handleSave() {
+    const newItem = { id: props.id, title: title, list: list };
+    props.setId(props.id + 1);
+    if(props.index==100){
+    props.setArrayOfTodo(props.arrayOfTodo.concat(newItem));}
+    else{props.arrayOfTodo[props.index]=(newItem)
+      props.setArrayOfTodo(props.arrayOfTodo);
     }
+    //console.log(props.arrayOfTodo);
+    setTitle("");
+    setList([])
+    setItem("")
+    props.setIndex(100)
+  }
 
-    setChecked(newChecked);
-  };
+  // const handleAddNewItem = () => {
+  //   if (newItem) {
+  //     console.log(listItem);
+  //     const current = props.todotasks.concat(listItem);
 
-  const handleAddNewItem = () => {
-    if (newItem) {
-      console.log(listItem);
-      const current = props.todotasks.concat(listItem);
+  //     props.settodotasks(current);
 
-      props.settodotasks(current);
+  //     console.log(props.todotasks);
+  //   }
+  //   console.log(newItem);
+  //   setNewItem(true);
+  //   counter = counter + 1;
+  //   props.count.push(counter);
+  // };
+  // const onChangeNames = (e) => {
+  //   props.setname(e.target.value);
+  // };
+  // const onChangeList = (e) => {
+  //   setlistItem(e.target.value);
+  //   //console.log(listItem);
+  // };
+  useEffect(() => {
+    setTitle((props.selected.title));
+    console.log(title)
+      setList((props.selected.list));
+    }, [props.selected]);
 
-      console.log(props.todotasks);
-    }
-    console.log(newItem);
-    setNewItem(true);
-    counter = counter + 1;
-    props.count.push(counter);
-  };
-  const onChangeNames = (e) => {
-    props.setname(e.target.value);
-  };
-  const onChangeList = (e) => {
-    setlistItem(e.target.value);
-    //console.log(listItem);
-  };
-
+  
   return (
     <>
       {" "}
@@ -95,67 +139,69 @@ export default function ListBox(props) {
           <Input
             placeholder="Enter your to-do list name"
             inputProps={{ "aria-label": "description" }}
-            onChange={onChangeNames}
-            value={props.name}
+            onChange={handleTitle}
+            value={title}
           />
         </form>
 
         <List className={classes.root}>
-          {[0].map((value) => {
+          {list.map((value) => {
             const labelId = `checkbox-list-label-${value}`;
 
             return (
-              <>
-                {props.count.map((elem) => {
-                  return (
-                    <>
-                      <ListItem
-                        key={value}
-                        role={undefined}
-                        dense
-                        button
-                        onClick={handleToggle(value)}
-                      >
-                        <ListItemIcon>
-                          <Checkbox
-                            edge="start"
-                            checked={checked.indexOf(value) !== -1}
-                            tabIndex={-1}
-                            disableRipple
-                            inputProps={{ "aria-labelledby": labelId }}
-                          />
-                        </ListItemIcon>
-
-                        <Input
-                          placeholder="e.g feed the dog"
-                          inputProps={{ "aria-label": "description" }}
-                          onChange={onChangeList}
-                        />
-                        <ListItemSecondaryAction>
-                          <IconButton edge="end" aria-label="delete">
-                            <RemoveIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-
-                      {/* <input type="checkbox" checked={elem.isDone ? true : false} />
-                  <p>{elem.name}</p> */}
-                    </>
-                  );
-                })}
-                <ListItem>
-                  <IconButton
-                    color="secondary"
-                    aria-label="add an item"
-                    className={classes.top}
-                    onClick={handleAddNewItem}
-                  >
-                    <AddIcon style={{ fontSize: 20 }} />
-                  </IconButton>
-                </ListItem>
-              </>
+              <ListItem
+                key={value}
+                role={undefined}
+                dense
+                button
+                onClick={handleToggle(value)}
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    checked={value.checked}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ "aria-labelledby": labelId }}
+                  />
+                </ListItemIcon>
+                <ListItemText id={labelId} primary={value.detail} />
+              </ListItem>
             );
           })}
+          <ListItem
+            role={undefined}
+            dense
+            button
+            // onClick={handleToggle(value)}
+          >
+            <ListItemIcon>
+              <Checkbox
+                edge="start"
+                //checked={checked.indexOf(value) !== -1}
+                tabIndex={-1}
+                disableRipple
+                disabled
+                // inputProps={{ "aria-labelledby": labelId }}
+              />
+            </ListItemIcon>
+            <Input
+              placeholder="Enter new to do"
+              inputProps={{ "aria-label": "description" }}
+              onChange={handleItem}
+              value={item}
+            />{" "}
+            <ListItemSecondaryAction onClick={handleAddItem}>
+              <IconButton edge="end" aria-label="comments">
+                <AddIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+          <ListItem>
+            <Button variant="contained" color="primary" onClick={handleSave}>
+              Save
+            </Button>
+          </ListItem>
         </List>
       </Card>
     </>

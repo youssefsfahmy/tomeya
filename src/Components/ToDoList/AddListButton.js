@@ -19,28 +19,12 @@ export default function AddListButton(props) {
   const classes = useStyles();
   const [check, setCheck] = React.useState(false);
   const handleAddListButton = () => {
-    props.setEdit(false);
-    // console.log(props.input);
-    if (!props.edit) {
-      props.setInput({
-        name: props.name,
-        id: props.id,
-        lists: props.todotasks,
-      });
-      const current = props.listNames.concat({
-        name: props.name,
-        id: props.id,
-        lists: props.todotasks,
-      });
-      props.setListNames(current);
-      console.log(props.listNames);
-      props.setId(props.id + 1);
-      props.setname("");
-    }
-    setCheck(true);
-    props.setaddListButton(true);
-    props.setCount([]);
-    props.setname("");
+ props.setSelected({
+  id:0,
+  title:"",
+  list:[]
+})
+props.setIndex(100)
   };
 
   return (

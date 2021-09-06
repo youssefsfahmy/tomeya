@@ -13,43 +13,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ListItemLink(props) {
-  return <ListItem button component="a" {...props} />;
-}
-
 export default function Listt(props) {
   const classes = useStyles();
-  let id = 0;
-  const onClickitem = (e) => {
-    // let id = e.target.key;
-    // id++;
-    // console.log("Click");
-    // console.log(e.target.id);
-  };
-
+ 
   const onDelete = (index) => {
-    //const current = props.listNames.splice(e.target.id, 1);
-    console.log(props.listNames);
-    console.log(index);
-    props.setListNames(
-      props.listNames.slice(0, index).concat(props.listNames.slice(index + 1))
+    props.setArrayOfTodo(
+      props.arrayOfTodo
+        .slice(0, index)
+        .concat(props.arrayOfTodo.slice(index + 1))
     );
-    console.log(props.listNames);
+    props.setSelected({
+      id:0,
+      title:"",
+      list:[]
+    })
   };
   const onEdit = (index) => {
-    props.setToEdit(props.listNames[index]);
-    props.setEdit(false);
-    props.setEdit(true);
-    console.log("Edit");
-    //  console.log(props.listNames[index]);
-  };
+     props.setSelected({
+      id: props.arrayOfTodo[index].id,
+      title: props.arrayOfTodo[index].title,
+      list: props.arrayOfTodo[index].list,
+    });
+    props.setIndex(index);
+    //console.log(props.selected.id);
 
+   // console.log(index);
+   
+  // props.setEdit(true);
+  };
+ 
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="main mailbox folders">
-        {props.listNames.map((elem, index) => {
+        {props.arrayOfTodo.map((elem, index) => {
           return (
-            <ListItem button id={index} onClick={onClickitem}>
+            <ListItem
+              button
+              id={index}
+              onClick={() => {
+                onEdit(index);
+              }}
+            >
               <ListItemIcon
                 button
                 onClick={() => {
@@ -68,12 +72,11 @@ export default function Listt(props) {
               >
                 <EditIcon id={index} />
               </ListItemIcon>
-              {elem.name}
+              {elem.title}
             </ListItem>
           );
         })}
       </List>{" "}
-      ;
     </div>
   );
 }
