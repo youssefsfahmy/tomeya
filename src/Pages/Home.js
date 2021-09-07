@@ -37,7 +37,7 @@ export default function Home() {
 
       <h2 className={classes.left}>What is TO-meya ?</h2>
       <div className={classes.prag}>
-        Simply , To-meya helps you to quickly take and save your notes, and
+        Simply, To-meya helps you to quickly take and save your notes, and
         checklists to access them again.
         <br />
         It's ideal for quick note-taking on the go, anyone who appreciates

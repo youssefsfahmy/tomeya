@@ -12,6 +12,13 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { useEffect, useState } from "react";
+import axios from 'axios';
+
+// useEffect(()=>{
+
+// })
+
 
 function Copyright() {
   return (
@@ -47,12 +54,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
-  const classes = useStyles();
-  //const [click, setClick] = React.useState(false);
-  const handleLogin = (e) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  
+  const emailChange = (e) =>{
+    setEmail(e.target.value);
+    console.log(email)
+  }
+
+  const passwordChange = (e) =>{
+    setPassword(e.target.value);
+    console.log(password);
+  } 
+  const handleSignin = async (e) => {
+  
     e.preventDefault();
-    window.location = "/home";
-  };
+    axios.post('http://localhost:5000/account/signin', {
+      email: email,
+      password: password,
+    }).then(res => {
+      console.log(res)
+    }).catch(err => {
+      console.log(err)
+    })  
+    // window.location = "/home";
+  }
+  const classes = useStyles();
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -71,6 +99,7 @@ export default function Login() {
             required
             fullWidth
             id="email"
+            onChange={emailChange}
             label="Email Address"
             name="email"
             autoComplete="email"
@@ -83,6 +112,7 @@ export default function Login() {
             fullWidth
             name="password"
             label="Password"
+            onChange={passwordChange}
             type="password"
             id="password"
             autoComplete="current-password"
@@ -97,7 +127,7 @@ export default function Login() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleLogin}
+            onClick={handleSignin}
           >
             Sign In
           </Button>
