@@ -1,4 +1,5 @@
 import React from "react";
+import { Alert } from "@material-ui/lab";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,11 +13,15 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
+      {"Copyright ©️ "}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
       </Link>{" "}
@@ -27,6 +32,12 @@ function Copyright() {
 }
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
@@ -45,13 +56,91 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-const handleSignup = (e) => {
-  e.preventDefault();
-  window.location = "/home";
-};
 
 export default function SignUp() {
+  const [email, setEmail] = useState("");
+  const [firstName, setfName] = useState("");
+  const [password, setPassword] = useState("");
+  const [lastName, setlName] = useState("");
+  const [errorMessage, setError] = useState("");
+
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const emailChange = (e) => {
+    setEmail(e.target.value);
+    console.log(email);
+  };
+
+  const passwordChange = (e) => {
+    setPassword(e.target.value);
+    console.log(password);
+  };
+
+  const fnameChange = (e) => {
+    setfName(e.target.value);
+    console.log(firstName);
+  };
+
+  const lnameChange = (e) => {
+    setlName(e.target.value);
+    console.log(lastName);
+  };
+
+  const handleSignup = async (e) => {
+    console.log(password);
+    console.log(email);
+    e.preventDefault();
+    axios
+      .post("http://localhost:3000/account/signup", {
+        email: email,
+        password: password,
+        lastName: lastName,
+        firstName: firstName,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data.message) {
+          setError(res.data.message);
+          setOpen(true);
+          window.location = "/signin";
+        }
+        if (res.data.error) {
+          setError(res.data.error);
+          handleClick();
+          setOpen(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // window.location = "/signin";
+  };
+
+  //   axios.post('http://localhost:5000/account/signup', {
+  //     email: email,
+  //     password: password
+  //   }).then(res => {
+  //     console.log(res)
+  //   }).catch(err => {
+  //     console.log(err)
+  //   })
+  // },[])
+
+  // const classes = useStyles();
 
   return (
     <Container component="main" maxWidth="xs">
@@ -71,6 +160,7 @@ export default function SignUp() {
                 name="firstName"
                 variant="outlined"
                 required
+                onChange={fnameChange}
                 fullWidth
                 id="firstName"
                 label="First Name"
@@ -81,6 +171,7 @@ export default function SignUp() {
               <TextField
                 variant="outlined"
                 required
+                onChange={lnameChange}
                 fullWidth
                 id="lastName"
                 label="Last Name"
@@ -94,6 +185,8 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="email"
+                value={email}
+                onChange={emailChange}
                 label="Email Address"
                 name="email"
                 autoComplete="email"
@@ -104,6 +197,8 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
+                value={password}
+                onChange={passwordChange}
                 name="password"
                 label="Password"
                 type="password"
@@ -140,6 +235,12 @@ export default function SignUp() {
       <Box mt={5}>
         <Copyright />
       </Box>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
+

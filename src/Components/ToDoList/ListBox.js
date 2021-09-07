@@ -7,12 +7,12 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
-import {useEffect} from "react";
+import { useEffect } from "react";
 import IconButton from "@material-ui/core/IconButton";
-import RemoveIcon from "@material-ui/icons/Remove";
 import Input from "@material-ui/core/Input";
 import AddIcon from "@material-ui/icons/Add";
 import Card from "@material-ui/core/Card";
+import axios from "axios";
 
 let counter = 1;
 
@@ -31,10 +31,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "0vw",
   },
   root2: {
-    
     width: "30vw",
     textAlign: "center",
-    marginLeft:"30vw"
+    marginLeft: "30vw",
   },
   bullet: {
     display: "inline-block",
@@ -56,20 +55,18 @@ export default function ListBox(props) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([0]);
 
- // console.log(props.arrayOfTodo[props.index].title);
+  // console.log(props.arrayOfTodo[props.index].title);
   const [item, setItem] = React.useState("");
   //console.log(props.selected.title)
   const [title, setTitle] = React.useState("");
-  console.log(title)
-    const [list, setList] = React.useState([]);
+  console.log(title);
+  const [list, setList] = React.useState([]);
   //  if(!(props.index==100)){
   // setTitle(props.arrayOfTodo[props.index].title);
   //  setList(props.arrayOfTodo[props.index].list);}
 
   function handleTitle(e) {
-    
     setTitle(e.target.value);
-    
   }
 
   function handleItem(e) {
@@ -78,7 +75,13 @@ export default function ListBox(props) {
   function handleAddItem() {
     setItem("");
     setList(list.concat({ detail: item, checked: false }));
+    //{headers:{'token':"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hcmlhbUBtYWlsLmNvbSIsImlkIjoiNjEzNzIxNjkzMmFkZWM5ZGU4NDExNTA4IiwiaWF0IjoxNjMxMDAzODE5LCJleHAiOjE2MzEwMjE4MTl9.tggYXhELaflwEaDXR2r1C9i3YQS-c7G6J1ekfNdpfBI"}}
+    // axios.post('http://localhost:3000/lists/addtask',item)
+    // .then(res=>console.log(res.data)).catch((error)=>{
+    //     console.log(error)
+    // });
   }
+
   const handleToggle = (value) => () => {
     var currentIndex = list.indexOf(value);
     const newList = [...list];
@@ -89,18 +92,43 @@ export default function ListBox(props) {
   };
 
   function handleSave() {
-    const newItem = { id: props.id, title: title, list: list };
-    props.setId(props.id + 1);
-    if(props.index==100){
-    props.setArrayOfTodo(props.arrayOfTodo.concat(newItem));}
-    else{props.arrayOfTodo[props.index]=(newItem)
+    let newItem;
+    const headers = window.localStorage.getItem("token");
+    console.log(props.index);
+    if (props.index == 100) {
+       newItem = { id: props.id, title: title, list: list };
+      props.setId(props.id + 1);
+      props.setArrayOfTodo(props.arrayOfTodo.concat(newItem));
+      axios
+        .post("http://localhost:3000/lists/createlist", newItem,{headers:{token:headers
+
+      } })
+        .then((res) => console.log("new"))
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+       newItem = { id: props.index, title: title, list: list };
+      console.log(newItem.id);
+      props.arrayOfTodo[props.index] = newItem;
       props.setArrayOfTodo(props.arrayOfTodo);
+
+      axios
+        .post("http://localhost:3000/lists/editlist", newItem, {headers:{token:headers
+
+      } })
+        .then((res) => console.log("edit"))
+        .catch((error) => {
+          console.log(error);
+        });
     }
-    //console.log(props.arrayOfTodo);
+    console.log(newItem);
+
+    console.log(props.arrayOfTodo);
     setTitle("");
-    setList([])
-    setItem("")
-    props.setIndex(100)
+    setList([]);
+    setItem("");
+    props.setIndex(100);
   }
 
   // const handleAddNewItem = () => {
@@ -125,12 +153,11 @@ export default function ListBox(props) {
   //   //console.log(listItem);
   // };
   useEffect(() => {
-    setTitle((props.selected.title));
-    console.log(title)
-      setList((props.selected.list));
-    }, [props.selected]);
+    setTitle(props.selected.title);
+    console.log(title);
+    setList(props.selected.list);
+  }, [props.selected]);
 
-  
   return (
     <>
       {" "}

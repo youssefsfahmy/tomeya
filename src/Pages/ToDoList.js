@@ -11,7 +11,7 @@ export default function ToDoList() {
     title: "",
     list: [],
   });
-  const [edit, setEdit] = React.useState(false);
+  
   const [index, setIndex] = React.useState(100);
   return (
     <div>
@@ -32,7 +32,7 @@ export default function ToDoList() {
         setArrayOfTodo={setArrayOfTodo}
         setSelected={setSelected}
         selected={selected}
-        edit={edit}
+      
         setIndex={setIndex}
         index={index}
       />
