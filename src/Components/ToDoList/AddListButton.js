@@ -22,7 +22,7 @@ export default function AddListButton(props) {
  props.setSelected({
   id:0,
   title:"",
-  list:[]
+  tasks:[]
 })
 props.setIndex(100)
   };

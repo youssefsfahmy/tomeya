@@ -1,21 +1,37 @@
+import { useEffect } from "react";
 import React from "react";
 import AddListButton from "../Components/ToDoList/AddListButton";
 import ListBox from "../Components/ToDoList/ListBox";
 import Listt from "../Components/ToDoList/Listt";
-import axios from 'axios';
+import axios from "axios";
 export default function ToDoList() {
   const [id, setId] = React.useState(0);
   const [arrayOfTodo, setArrayOfTodo] = React.useState([]);
   const [selected, setSelected] = React.useState({
     id: 0,
     title: "",
-    list: [],
+    tasks: [],
   });
-  
+  const headers = window.localStorage.getItem("token");
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:3000/lists/viewListNames",{},
+
+        { headers: { token: headers } }
+      )
+      .then((res) => setArrayOfTodo(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [id]);
+
+  // console.log(arrayOfTodo, "ballalalala");
+  // console.log(window.localStorage.getItem("token"));
   const [index, setIndex] = React.useState(100);
   return (
     <div>
-      <AddListButton setSelected={setSelected}   setIndex={setIndex}/>
+      <AddListButton setSelected={setSelected} setIndex={setIndex} />
 
       <Listt
         arrayOfTodo={arrayOfTodo}
@@ -32,7 +48,6 @@ export default function ToDoList() {
         setArrayOfTodo={setArrayOfTodo}
         setSelected={setSelected}
         selected={selected}
-      
         setIndex={setIndex}
         index={index}
       />

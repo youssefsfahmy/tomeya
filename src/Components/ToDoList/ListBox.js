@@ -59,7 +59,7 @@ export default function ListBox(props) {
   const [item, setItem] = React.useState("");
   //console.log(props.selected.title)
   const [title, setTitle] = React.useState("");
-  console.log(title);
+ // console.log(title);
   const [list, setList] = React.useState([]);
   //  if(!(props.index==100)){
   // setTitle(props.arrayOfTodo[props.index].title);
@@ -103,7 +103,7 @@ export default function ListBox(props) {
     const headers = window.localStorage.getItem("token");
     console.log(props.index);
     if (props.index == 100) {
-       newItem = { id: props.id, title: title, list: list };
+       newItem = { id: props.id, title: title, tasks: list };
       props.setId(props.id + 1);
       props.setArrayOfTodo(props.arrayOfTodo.concat(newItem));
       axios
@@ -115,10 +115,11 @@ export default function ListBox(props) {
           console.log(error);
         });
     } else {
-       newItem = { id: props.index, title: title, list: list };
+      console.log(props.selected)
+       newItem = { id: props.index, title: title, tasks: list };
       console.log(newItem.id);
       props.arrayOfTodo[props.index] = newItem;
-      props.setArrayOfTodo(props.arrayOfTodo);
+      //props.setArrayOfTodo(props.arrayOfTodo);
 
       axios
         .post("http://localhost:3000/lists/editlist", newItem, {headers:{token:headers
@@ -162,7 +163,7 @@ export default function ListBox(props) {
   useEffect(() => {
     setTitle(props.selected.title);
     console.log(title);
-    setList(props.selected.list);
+    setList(props.selected.tasks);
   }, [props.selected]);
 
   return (

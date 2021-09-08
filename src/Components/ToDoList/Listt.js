@@ -19,32 +19,31 @@ export default function Listt(props) {
 
   const headers = window.localStorage.getItem("token");
   const onDelete = (index) => {
-    const temp={id:index, t:0}
+    const temp = { id: index, t: 0 };
     props.setArrayOfTodo(
       props.arrayOfTodo
         .slice(0, index)
         .concat(props.arrayOfTodo.slice(index + 1))
     );
     axios
-    .post("http://localhost:3000/lists/deletelist", temp,{headers:{token:headers
-
-    } })
-    .then((res) => console.log("new"))
-    .catch((error) => {
-      console.log(error);
-    });
+      .post("http://localhost:3000/lists/deletelist", temp, {
+        headers: { token: headers },
+      })
+      .then((res) => console.log("new"))
+      .catch((error) => {
+        console.log(error);
+      });
     props.setSelected({
       id: 0,
       title: "",
       list: [],
     });
- 
   };
   const onEdit = (index) => {
     props.setSelected({
       id: props.arrayOfTodo[index].id,
       title: props.arrayOfTodo[index].title,
-      list: props.arrayOfTodo[index].list,
+      tasks: props.arrayOfTodo[index].tasks,
     });
     props.setIndex(index);
     //console.log(props.selected.id);
