@@ -62,9 +62,9 @@ export default function Listt(props) {
             <ListItem
               button
               id={index}
-              onClick={() => {
-                onEdit(index);
-              }}
+              // onClick={() => {
+              //   onEdit(index);
+              // }}
             >
               <ListItemIcon
                 button

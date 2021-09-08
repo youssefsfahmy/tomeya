@@ -83,12 +83,19 @@ export default function ListBox(props) {
   }
 
   const handleToggle = (value) => () => {
+    const headers = window.localStorage.getItem("token");
     var currentIndex = list.indexOf(value);
+    let temp={index:currentIndex, id:props.id}
     const newList = [...list];
     var currentItem = newList[currentIndex];
     currentItem.checked = !currentItem.checked;
     newList.splice(currentIndex, 1, currentItem);
     setChecked(newList);
+    axios
+        .post("http://localhost:3000/lists/checkitem", temp,{headers:{token:headers
+
+      } })
+
   };
 
   function handleSave() {
