@@ -1,4 +1,5 @@
 import React from "react";
+import { Alert} from '@material-ui/lab';
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,6 +15,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
 import axios from 'axios';  
+  import Snackbar from '@material-ui/core/Snackbar';
+  import MuiAlert from '@material-ui/lab/Alert';
 
 function Copyright() {
   return (
@@ -29,6 +32,12 @@ function Copyright() {
 }
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
@@ -55,6 +64,22 @@ const useStyles = makeStyles((theme) => ({
     const [firstName, setfName] = useState('');
     const [password, setPassword] = useState('');
     const [lastName, setlName] = useState('');
+    const [errorMessage, setError] = useState('');
+
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+  
+    const handleClick = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpen(false);
+    };
 
     const emailChange = (e) =>{
       setEmail(e.target.value);
@@ -78,8 +103,8 @@ const useStyles = makeStyles((theme) => ({
 
 
     const handleSignup = async (e) => {
-      // console.log(password);
-      // console.log(email);
+      console.log(password);
+      console.log(email);
       e.preventDefault();
       axios.post('http://localhost:5000/account/signup', {
         email: email,
@@ -88,10 +113,21 @@ const useStyles = makeStyles((theme) => ({
         firstName: firstName
       }).then(res => {
         console.log(res)
+        if(res.data.message){
+          setError(res.data.message)
+          setOpen(true);
+          window.location = "/signin";
+        }
+        if(res.data.error){
+          setError(res.data.error)
+          handleClick()
+          setOpen(true);
+        }
       }).catch(err => {
         console.log(err)
       })
-      window.location = "/signin";
+      
+    
     }
     
 //   axios.post('http://localhost:5000/account/signup', {
@@ -106,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
 
     
   
-  const classes = useStyles();
+  // const classes = useStyles();
 
 
   return (
@@ -202,6 +238,9 @@ const useStyles = makeStyles((theme) => ({
       <Box mt={5}>
         <Copyright />
       </Box>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose}  severity="error">{errorMessage}</Alert>
+      </Snackbar>
     </Container>
   );
 

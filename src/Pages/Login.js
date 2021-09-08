@@ -1,5 +1,6 @@
 import React from "react";
 import Avatar from "@material-ui/core/Avatar";
+import { Alert} from '@material-ui/lab';
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -14,6 +15,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 // useEffect(()=>{
 
@@ -34,6 +37,11 @@ function Copyright() {
 }
 
 const useStyles = makeStyles((theme) => ({
+   root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },},
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
@@ -56,7 +64,19 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setError] = useState('');
   
+  const [open, setOpen] = React.useState(false);
+
+  
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const emailChange = (e) =>{
     setEmail(e.target.value);
     console.log(email)
@@ -74,10 +94,26 @@ export default function Login() {
       password: password,
     }).then(res => {
       console.log(res)
+      if(res.data.message){
+        setError(res.data.message)
+        setOpen(true);
+       
+      }
+      if(res.data.error){
+        setError(res.data.error)
+        setOpen(true);
+      }
+      window.localStorage.setItem("token", res.headers.authtoken);
+      window.localStorage.setItem("name", res.headers.name);
+      console.log(window.localStorage.getItem("token"))
+      console.log(window.localStorage.getItem("name"))
+
+      window.location = "/home";
     }).catch(err => {
       console.log(err)
     })  
-    // window.location = "/home";
+
+    
   }
   const classes = useStyles();
 
@@ -145,6 +181,9 @@ export default function Login() {
       <Box mt={8}>
         <Copyright />
       </Box>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose}  severity="error">{errorMessage}</Alert>
+      </Snackbar>
     </Container>
   );
 }

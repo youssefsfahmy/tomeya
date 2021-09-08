@@ -29,9 +29,9 @@ renderRow.propTypes = {
   style: PropTypes.object.isRequired,
 };
 
-export default function ListScroller() {
+export default function ListScroller(props) {
   const classes = useStyles();
-
+  console.log(props.object);
   return (
     <div className={classes.root}>
       <FixedSizeList height={400} width={300} itemSize={46} itemCount={200}>

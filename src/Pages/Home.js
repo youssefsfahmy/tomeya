@@ -31,9 +31,13 @@ export default function Home() {
     }
   }, [button]);
 
+const name = window.localStorage.getItem("name");
+
+console.log(window.localStorage.getItem("token"))
+
   return (
     <div>
-      <h1 className={classes.title}>Hey Nour!</h1>
+      <h1 className={classes.title}>Hey {name} </h1>
 
       <h2 className={classes.left}>What is TO-meya ?</h2>
       <div className={classes.prag}>

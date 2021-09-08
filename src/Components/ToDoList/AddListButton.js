@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   top: {
-    marginTop: "16vw",
+    marginTop: "0vw",
     marginLeft: "87vw",
   },
   color: {
@@ -20,9 +20,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddListButton(props) {
   const classes = useStyles();
-
+  const [check, setCheck] = React.useState(false);
   const handleAddListButton = () => {
-    props.setaddListButton(true);
+ props.setSelected({
+  id:0,
+  title:"",
+  list:[]
+})
+props.setIndex(100)
   };
 
   return (

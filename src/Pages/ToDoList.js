@@ -1,32 +1,56 @@
-import React from "react";
-import Scroll from "../Components/ToDoList/Scroll";
+import React, {useEffect } from "react";
 import AddListButton from "../Components/ToDoList/AddListButton";
 import ListBox from "../Components/ToDoList/ListBox";
-
-import { makeStyles } from "@material-ui/core/styles";
-import tom from "./tomeyaa-03.png";
-const useStyles = makeStyles({
-  // background: {
-  //   backgroundImage: `url(${tom})`,
-  // },
-  root: {
-    width: "100vw",
-    height: "150vw",
-    backgroundImage: `url(${tom})`,
-  },
-});
-
+import Listt from "../Components/ToDoList/Listt";
+import axios from 'axios';
 export default function ToDoList() {
-  const classes = useStyles();
-  const [addListButton, setaddListButton] = React.useState(false);
+
+  const [id, setId] = React.useState(0);
+  const [arrayOfTodo, setArrayOfTodo] = React.useState([]);
+  const [selected, setSelected] = React.useState({
+    id: 0,
+    title: "",
+    list: [],
+  });
+  const [edit, setEdit] = React.useState(false);
+  const [index, setIndex] = React.useState(100);
+
+  const headers = window.localStorage.getItem("token");
+  useEffect(() => {
+    console.log(window.localStorage.getItem("token"))
+    axios.post('http://localhost:5000/lists/viewListNames',{},
+    {headers : {token:headers}}
+    )
+  .then((res) => setArrayOfTodo(res.data))
+  .catch((error) => {
+    console.log(error)
+  }
+  )})
+
+  console.log(window.localStorage.getItem("token"))
+
   return (
-    <div className={classes.root}>
-      <Scroll />
-      {addListButton ? <p> jhgjug </p> : <div />}
-      <ListBox />
-      <AddListButton
-        setaddListButton={setaddListButton}
-        addListButton={addListButton}
+    <div>
+      <AddListButton setSelected={setSelected}  setIndex={setIndex}/>
+
+      <Listt
+        arrayOfTodo={arrayOfTodo}
+        setSelected={setSelected}
+        setArrayOfTodo={setArrayOfTodo}
+        setIndex={setIndex}
+        index={index}
+        selected={selected}
+      />
+      <ListBox
+        id={id}
+        setId={setId}
+        arrayOfTodo={arrayOfTodo}
+        setArrayOfTodo={setArrayOfTodo}
+        setSelected={setSelected}
+        selected={selected}
+        edit={edit}
+        setIndex={setIndex}
+        index={index}
       />
     </div>
   );
