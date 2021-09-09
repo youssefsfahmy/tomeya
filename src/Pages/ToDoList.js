@@ -8,15 +8,16 @@ export default function ToDoList() {
   const [id, setId] = React.useState(0);
   const [arrayOfTodo, setArrayOfTodo] = React.useState([]);
   const [selected, setSelected] = React.useState({
-    id: 0,
+   //_id:0,
     title: "",
     tasks: [],
   });
   const headers = window.localStorage.getItem("token");
-  useEffect(() => {
-    axios
+  useEffect (async() => {
+   await axios
       .post(
-        "http://localhost:3000/lists/viewListNames",{},
+        "http://localhost:3000/lists/viewListNames",
+        {},
 
         { headers: { token: headers } }
       )

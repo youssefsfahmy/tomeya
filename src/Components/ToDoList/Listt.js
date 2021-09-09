@@ -19,7 +19,8 @@ export default function Listt(props) {
 
   const headers = window.localStorage.getItem("token");
   const onDelete = (index) => {
-    const temp = { id: index, t: 0 };
+    // const temp = { listId: index, t: 0 };
+    const temp = { _id: props.arrayOfTodo[index]._id, t: 0 };
     props.setArrayOfTodo(
       props.arrayOfTodo
         .slice(0, index)
@@ -34,21 +35,22 @@ export default function Listt(props) {
         console.log(error);
       });
     props.setSelected({
-      id: 0,
+     // listId: 0,
       title: "",
-      list: [],
+      tasks: [],
     });
   };
   const onEdit = (index) => {
     props.setSelected({
-      id: props.arrayOfTodo[index].id,
+      //_id kanet listid
+    
       title: props.arrayOfTodo[index].title,
       tasks: props.arrayOfTodo[index].tasks,
     });
     props.setIndex(index);
     //console.log(props.selected.id);
 
-    // console.log(index);
+     console.log(props.arrayOfTodo[index]._id);
 
     // props.setEdit(true);
   };

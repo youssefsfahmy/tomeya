@@ -13,6 +13,7 @@ import Input from "@material-ui/core/Input";
 import AddIcon from "@material-ui/icons/Add";
 import Card from "@material-ui/core/Card";
 import axios from "axios";
+import { set } from "mongoose";
 
 let counter = 1;
 
@@ -54,12 +55,12 @@ const useStyles = makeStyles((theme) => ({
 export default function ListBox(props) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([0]);
-
+  const [ID, setID] = React.useState(0);
   // console.log(props.arrayOfTodo[props.index].title);
   const [item, setItem] = React.useState("");
   //console.log(props.selected.title)
   const [title, setTitle] = React.useState("");
- // console.log(title);
+  // console.log(title);
   const [list, setList] = React.useState([]);
   //  if(!(props.index==100)){
   // setTitle(props.arrayOfTodo[props.index].title);
@@ -85,46 +86,43 @@ export default function ListBox(props) {
   const handleToggle = (value) => () => {
     const headers = window.localStorage.getItem("token");
     var currentIndex = list.indexOf(value);
-    let temp={index:currentIndex, id:props.id}
+    let temp = { index: currentIndex, id: props.id };
     const newList = [...list];
     var currentItem = newList[currentIndex];
     currentItem.checked = !currentItem.checked;
     newList.splice(currentIndex, 1, currentItem);
     setChecked(newList);
-    axios
-        .post("http://localhost:3000/lists/checkitem", temp,{headers:{token:headers
-
-      } })
-
+    axios.post("http://localhost:3000/lists/checkitem", temp, {
+      headers: { token: headers },
+    });
   };
-
-  function handleSave() {
+  async function handleSave() {
     let newItem;
     const headers = window.localStorage.getItem("token");
     console.log(props.index);
     if (props.index == 100) {
-       newItem = { id: props.id, title: title, tasks: list };
+      newItem = { title: title, tasks: list };
       props.setId(props.id + 1);
       props.setArrayOfTodo(props.arrayOfTodo.concat(newItem));
-      axios
-        .post("http://localhost:3000/lists/createlist", newItem,{headers:{token:headers
-
-      } })
+      await axios
+        .post("http://localhost:3000/lists/createlist", newItem, {
+          headers: { token: headers },
+        })
         .then((res) => console.log("new"))
         .catch((error) => {
           console.log(error);
         });
     } else {
-      console.log(props.selected)
-       newItem = { id: props.index, title: title, tasks: list };
-      console.log(newItem.id);
+      console.log(props.selected);
+      newItem = { _id: props.arrayOfTodo[props.index]._id, title: title, tasks: list };
+      //console.log(newItem.id);
       props.arrayOfTodo[props.index] = newItem;
       //props.setArrayOfTodo(props.arrayOfTodo);
 
-      axios
-        .post("http://localhost:3000/lists/editlist", newItem, {headers:{token:headers
-
-      } })
+      await axios
+        .post("http://localhost:3000/lists/editlist", newItem, {
+          headers: { token: headers },
+        })
         .then((res) => console.log("edit"))
         .catch((error) => {
           console.log(error);
@@ -178,6 +176,8 @@ export default function ListBox(props) {
             value={title}
           />
         </form>
+      
+
 
         <List className={classes.root}>
           {list.map((value) => {
@@ -238,7 +238,7 @@ export default function ListBox(props) {
             </Button>
           </ListItem>
         </List>
-      </Card>
+      </Card> 
     </>
   );
 }
