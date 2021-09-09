@@ -21,7 +21,7 @@ import axios from 'axios';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
+      {"Copyright ©️ "}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
       </Link>{" "}
@@ -101,6 +101,7 @@ const useStyles = makeStyles((theme) => ({
       console.log(lastName);
     } 
 
+    console.log(window.localStorage ,'dasasd');
 
     const handleSignup = async (e) => {
       console.log(password);
@@ -116,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
         if(res.data.message){
           setError(res.data.message)
           setOpen(true);
-          window.location = "/signin";
+          // window.location = "/signin";
         }
         if(res.data.error){
           setError(res.data.error)
@@ -248,3 +249,4 @@ const useStyles = makeStyles((theme) => ({
 
 
 }
+

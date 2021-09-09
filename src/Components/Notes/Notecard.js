@@ -28,6 +28,7 @@ const useStyles = makeStyles({
     justifyContent: "space-around",
     marginTop: "0.5vw",
     marginLeft: "1vw",
+    height: "24vw"
   },
   bullet: {
     display: "inline-block",
@@ -48,6 +49,8 @@ const useStyles = makeStyles({
     height: "10vw",
   },
   button: {
+    position: "relative",
+    top: "1.65vw",
     float: "right",
   },
 });
@@ -172,6 +175,7 @@ export default function Notecard(props) {
                       </IconButton>
                     </CardContent>
                   </Card>
+                  
                 </>
               );
             })}

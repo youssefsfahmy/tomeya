@@ -1,13 +1,14 @@
 import { Backdrop } from "@material-ui/core";
-import React from "react";
+import React ,{useEffect} from "react";
 import Notecard from "../Components/Notes/Notecard";
 import { makeStyles } from "@material-ui/core/styles";
 import tom from "./tomeyaa-03.png";
+import { useHistory } from "react-router-dom";  
+
+
 
 const useStyles = makeStyles({
-  // background: {
-  //   backgroundImage: `url(${tom})`,
-  // },
+
   root: {
     width: "100vw",
     height: "150vw",
@@ -15,6 +16,19 @@ const useStyles = makeStyles({
   },
 });
 export default function Notes() {
+  
+  const history = useHistory()
+
+
+useEffect(() => {
+  console.log(window.localStorage,"dsfsdfsf");
+  if(window.localStorage.getItem('token')== 'null'){
+    console.log("its null")
+    history.push('/signin')
+  }
+
+},[])
+
   const classes = useStyles();
 
   const [notesArray, setNotesArray] = React.useState([]);

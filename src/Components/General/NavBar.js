@@ -8,7 +8,10 @@ import IconButton from "@material-ui/core/IconButton";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { withWidth } from "@material-ui/core";
 import log from "./logo.png";
+import { useHistory } from "react-router-dom";
 // import logo from "../logo.png";
+
+
 
 // // import tom from "./tomeyaa-03.png";
 // import m from "./logo.png";
@@ -23,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 5,
-    marginLeft: "2vw",
+    marginLeft: "0vw",
     fontWeight: "bold",
     fontSize: "2vw",
   },
@@ -70,7 +73,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function NavBar(props) {
+  const history = useHistory()
+  const signout = () =>{
+    history.push('/signin');
+    window.localStorage.setItem('token','undefined')
+  }
   const classes = useStyles();
   const handleHome = (e) => {
     e.preventDefault();
@@ -86,7 +95,7 @@ export default function NavBar(props) {
   };
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={classes.backColor}>
+      <AppBar id = "navbar" position="static" className={classes.backColor}>
         <Toolbar>
           <div className={classes.new}></div>
           <IconButton
@@ -118,10 +127,19 @@ export default function NavBar(props) {
             >
               Notes
             </Button>
+            
           </div>
-          <AccountCircleIcon className={classes.user} />
+          <div>
+          <Button id = "signout"  size="small" variant="contained" color="secondary" onClick = {signout}>
+        Signout
+      </Button>
+            </div>
+          
+         
         </Toolbar>
+       
       </AppBar>
+      
     </div>
   );
 }

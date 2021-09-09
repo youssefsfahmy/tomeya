@@ -22,11 +22,10 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 // })
 
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
+      {"Copyright ©️ "}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
       </Link>{" "}
@@ -68,7 +67,12 @@ export default function Login() {
   
   const [open, setOpen] = React.useState(false);
 
-  
+  // window.localStorage.setItem("token", null);
+  // window.localStorage.setItem("name", null);
+  console.log(window.localStorage);
+  console.log(window.localStorage.getItem("token"), 'llls')
+      console.log(window.localStorage.getItem("name"))
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -76,6 +80,7 @@ export default function Login() {
 
     setOpen(false);
   };
+  const classes = useStyles();
 
   const emailChange = (e) =>{
     setEmail(e.target.value);
@@ -108,14 +113,14 @@ export default function Login() {
       console.log(window.localStorage.getItem("token"))
       console.log(window.localStorage.getItem("name"))
 
-      window.location = "/home";
+      // window.location = "/home";
     }).catch(err => {
       console.log(err)
     })  
 
     
   }
-  const classes = useStyles();
+  // const classes = useStyles();
 
 
   return (
