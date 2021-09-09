@@ -1,33 +1,57 @@
-import React from "react";
-import Scroll from "../Components/ToDoList/Scroll";
-import AddListButton from "../Components/ToDoList/AddListButton";
-import ListBox from "../Components/ToDoList/ListBox";
-
-import { makeStyles } from "@material-ui/core/styles";
-import tom from "./tomeyaa-03.png";
-const useStyles = makeStyles({
-  // background: {
-  //   backgroundImage: `url(${tom})`,
-  // },
-  root: {
-    width: "100vw",
-    height: "150vw",
-    backgroundImage: `url(${tom})`,
-  },
-});
-
+import { useEffect } from 'react'
+import React from 'react'
+import AddListButton from '../Components/ToDoList/AddListButton'
+import ListBox from '../Components/ToDoList/ListBox'
+import Listt from '../Components/ToDoList/Listt'
+import axios from 'axios'
 export default function ToDoList() {
-  const classes = useStyles();
-  const [addListButton, setaddListButton] = React.useState(false);
+  const [id, setId] = React.useState(0)
+  const [arrayOfTodo, setArrayOfTodo] = React.useState([])
+  const [selected, setSelected] = React.useState({
+    //_id:0,
+    title: '',
+    tasks: [],
+  })
+  const headers = window.localStorage.getItem('token')
+  useEffect(async () => {
+    await axios
+      .post(
+        'http://localhost:5000/lists/viewListNames',
+        {},
+
+        { headers: { token: headers } }
+      )
+      .then((res) => setArrayOfTodo(res.data))
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [id])
+
+  // console.log(arrayOfTodo, "ballalalala");
+  // console.log(window.localStorage.getItem("token"));
+  const [index, setIndex] = React.useState(100)
   return (
-    <div className={classes.root}>
-      <Scroll />
-      {addListButton ? <p> jhgjug </p> : <div />}
-      <ListBox />
-      <AddListButton
-        setaddListButton={setaddListButton}
-        addListButton={addListButton}
+    <div>
+      <AddListButton setSelected={setSelected} setIndex={setIndex} />
+
+      <Listt
+        arrayOfTodo={arrayOfTodo}
+        setSelected={setSelected}
+        setArrayOfTodo={setArrayOfTodo}
+        setIndex={setIndex}
+        index={index}
+        selected={selected}
+      />
+      <ListBox
+        id={id}
+        setId={setId}
+        arrayOfTodo={arrayOfTodo}
+        setArrayOfTodo={setArrayOfTodo}
+        setSelected={setSelected}
+        selected={selected}
+        setIndex={setIndex}
+        index={index}
       />
     </div>
-  );
+  )
 }

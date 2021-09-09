@@ -75,11 +75,11 @@ export default function Login() {
       .then((res) => {
         console.log(res)
         window.localStorage.setItem('token', res.headers.authtoken)
+        window.location = '/home'
       })
       .catch((err) => {
         console.log(err)
       })
-    // window.location = '/home'
   }
   const classes = useStyles()
 
