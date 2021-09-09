@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
+import { useHistory } from 'react-router-dom'
 
 function Copyright() {
   return (
@@ -63,6 +64,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('')
   const [lastName, setlName] = useState('')
   const [errorMessage, setError] = useState('')
+  const [sign, setsign] = useState(false)
 
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
@@ -70,6 +72,10 @@ export default function SignUp() {
   const handleClick = () => {
     setOpen(true)
   }
+
+  // useEffect(() => {
+  //   window.location('/')
+  // }, [sign])
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -99,6 +105,8 @@ export default function SignUp() {
     console.log(lastName)
   }
 
+  const history = useHistory()
+
   console.log(window.localStorage, 'dasasd')
 
   const handleSignup = async (e) => {
@@ -117,14 +125,23 @@ export default function SignUp() {
         if (res.data.message) {
           setError(res.data.message)
           setOpen(true)
-          // window.location = "/signin";
+          setsign(true)
+        } else {
+          history.push('/')
         }
+
         if (res.data.error) {
           setError(res.data.error)
           handleClick()
           setOpen(true)
+          setsign(true)
         }
+        // if (!sign) {
+        //   // window.location('/')
+        //
+        // }
       })
+
       .catch((err) => {
         console.log(err)
       })

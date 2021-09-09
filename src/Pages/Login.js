@@ -1,5 +1,6 @@
 import React from 'react'
 import Avatar from '@material-ui/core/Avatar'
+import { Alert } from '@material-ui/lab'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
@@ -14,6 +15,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import Snackbar from '@material-ui/core/Snackbar'
+import { useHistory } from 'react-router-dom'
+
+import MuiAlert from '@material-ui/lab/Alert'
 
 // useEffect(()=>{
 
@@ -33,6 +38,12 @@ function Copyright() {
 }
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -55,12 +66,30 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setError] = useState('')
+
+  const [open, setOpen] = React.useState(false)
+
+  // window.localStorage.setItem("token", null);
+  // window.localStorage.setItem("name", null);
+  console.log(window.localStorage)
+  console.log(window.localStorage.getItem('token'), 'llls')
+  console.log(window.localStorage.getItem('name'))
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpen(false)
+  }
+  const classes = useStyles()
 
   const emailChange = (e) => {
     setEmail(e.target.value)
     console.log(email)
   }
-
+  const history = useHistory()
   const passwordChange = (e) => {
     setPassword(e.target.value)
     console.log(password)
@@ -74,14 +103,26 @@ export default function Login() {
       })
       .then((res) => {
         console.log(res)
+        if (res.data.message) {
+          setError(res.data.message)
+          setOpen(true)
+        } else {
+          history.push('/home')
+        }
+        if (res.data.error) {
+          setError(res.data.error)
+          setOpen(true)
+        }
         window.localStorage.setItem('token', res.headers.authtoken)
-        window.location = '/home'
+        window.localStorage.setItem('name', res.headers.name)
+        console.log(window.localStorage.getItem('token'))
+        console.log(window.localStorage.getItem('name'))
       })
       .catch((err) => {
         console.log(err)
       })
   }
-  const classes = useStyles()
+  // const classes = useStyles();
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -146,6 +187,11 @@ export default function Login() {
       <Box mt={8}>
         <Copyright />
       </Box>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity='error'>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   )
 }

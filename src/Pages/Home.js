@@ -37,6 +37,10 @@ export default function Home() {
     }
   }, [button])
 
+  const name = window.localStorage.getItem('name')
+
+  console.log(window.localStorage.getItem('token'))
+
   return (
     <div div className={classes.root}>
       <h1 className={classes.title}>Hey Nour!</h1>

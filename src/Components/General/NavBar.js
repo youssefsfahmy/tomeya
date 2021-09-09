@@ -2,10 +2,14 @@ import React, { Componente } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import log from '../../logo.png'
+import { withWidth } from '@material-ui/core'
+import log from './logo.png'
+import { useHistory } from 'react-router-dom'
+// import logo from "../logo.png";
 
 // // import tom from "./tomeyaa-03.png";
 // import m from "./logo.png";
@@ -79,6 +83,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function NavBar(props) {
+  const history = useHistory()
+  const signout = () => {
+    history.push('/')
+    window.localStorage.setItem('token', 'undefined')
+  }
   const classes = useStyles()
   const handleHome = (e) => {
     e.preventDefault()
@@ -94,7 +103,7 @@ export default function NavBar(props) {
   }
   return (
     <div className={classes.root}>
-      <AppBar position='static' className={classes.backColor}>
+      <AppBar id='navbar' position='static' className={classes.backColor}>
         <Toolbar>
           <div className={classes.new}></div>
           <img src={log} className={classes.logo}></img>
@@ -128,7 +137,17 @@ export default function NavBar(props) {
               Notes
             </Button>
           </div>
-          <AccountCircleIcon className={classes.user} />
+          <div>
+            <Button
+              id='signout'
+              size='small'
+              variant='contained'
+              color='secondary'
+              onClick={signout}
+            >
+              Signout
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
     </div>

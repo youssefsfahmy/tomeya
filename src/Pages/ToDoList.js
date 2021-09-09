@@ -4,7 +4,17 @@ import AddListButton from '../Components/ToDoList/AddListButton'
 import ListBox from '../Components/ToDoList/ListBox'
 import Listt from '../Components/ToDoList/Listt'
 import axios from 'axios'
+import { makeStyles } from '@material-ui/core/styles'
+import tom from './tomeyaa-03.png'
+const useStyles = makeStyles({
+  root: {
+    width: '100vw',
+    height: '150vw',
+    backgroundImage: `url(${tom})`,
+  },
+})
 export default function ToDoList() {
+  const classes = useStyles()
   const [id, setId] = React.useState(0)
   const [arrayOfTodo, setArrayOfTodo] = React.useState([])
   const [selected, setSelected] = React.useState({
@@ -31,7 +41,7 @@ export default function ToDoList() {
   // console.log(window.localStorage.getItem("token"));
   const [index, setIndex] = React.useState(100)
   return (
-    <div>
+    <div className={classes.root}>
       <AddListButton setSelected={setSelected} setIndex={setIndex} />
 
       <Listt
