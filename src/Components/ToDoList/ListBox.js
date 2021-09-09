@@ -85,7 +85,7 @@ export default function ListBox(props) {
   const handleToggle = (value) => () => {
     const headers = window.localStorage.getItem('token')
     var currentIndex = list.indexOf(value)
-    let temp = { index: currentIndex, id: props.id }
+    let temp = { index: currentIndex, id: props.arrayOfTodo[currentIndex]._id }
     const newList = [...list]
     var currentItem = newList[currentIndex]
     currentItem.checked = !currentItem.checked
