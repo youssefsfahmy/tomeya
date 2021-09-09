@@ -1,17 +1,15 @@
 import React from 'react'
 import { useEffect } from 'react'
 import axios from 'axios'
-import { createContext } from 'react'
+import { Alert } from '@material-ui/lab'
 
 import Notecard from '../Components/Notes/Notecard'
 import { makeStyles } from '@material-ui/core/styles'
 import tom from './tomeyaa-03.png'
-import Remove from '@material-ui/icons/Remove'
+import { Snackbar } from '@material-ui/core'
+import { MuiAlert } from '@material-ui/lab'
 
 const useStyles = makeStyles({
-  // background: {
-  //   backgroundImage: `url(${tom})`,
-  // },
   root: {
     width: '100vw',
     height: '150vw',
@@ -26,6 +24,22 @@ export default function Notes() {
   const [taskNote, setTaskNote] = React.useState('')
   const [change, setChange] = React.useState(false)
   const [notesArray, setNotesArray] = React.useState([])
+  const [error, setError] = React.useState('')
+  const [open, setOpen] = React.useState(false)
+  const [saved, setSaved] = React.useState('')
+  const [severityState, setSeverityState] = React.useState('')
+
+  const handleClick = () => {
+    setOpen(true)
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpen(false)
+  }
 
   useEffect(() => {
     console.log('Here')
@@ -65,33 +79,8 @@ export default function Notes() {
   const handleNewNotecard = (event) => {
     setNewNotecard(event.target.value)
   }
-  //creating a notecard object and adding it to the array NotesArray
-
-  // useEffect(() => {
-  //   axios
-  //     .post(
-  //       'http://localhost:5000/notes/viewAllNotes',
-  //       { Notes: {} },
-  //       {
-  //         headers: {
-  //           token: headers,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       console.log(res.data.displayedNotes)
-  //       setNotesArray(res.data.displayedNotes)
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //     })
-  // }, [change])
 
   const handleAddNotecard = async (title, task) => {
-    // var notecard = { id: IdCounter, title: title, task: task }
-    // setNotesArray((prevArray) => [...prevArray, notecard])
-    // setIdCounter(IdCounter + 1)
-
     console.log('note added')
     const res = await axios.post(
       'http://localhost:5000/notes/createNote',
@@ -108,27 +97,45 @@ export default function Notes() {
       }
     )
     console.log(res)
+
+    if (res.data.error) {
+      setSeverityState('warning')
+      setError(res.data.error)
+      handleClick()
+      setOpen(true)
+    }
+    if (res.data.message) {
+      setSeverityState('success')
+      setError('saved succesfuly')
+      handleClick()
+      setOpen(true)
+    }
+
     if (res.data.statusCode === 0) {
       setChange((prev) => !prev)
+    }
+    if (res.data.statusCode === 1) {
+      console.log(res.data.error)
     }
   }
 
   const handleDeleteNotecard = async (id) => {
     console.log(id)
-    const res = await axios.post('http://localhost:5000/notes/deleteNote', id, {
-      headers: {
-        token: headers,
-      },
-    })
-    console.log(res.data)
+    const res = await axios.post(
+      'http://localhost:5000/notes/deleteNote',
+      { id },
+      {
+        headers: {
+          token: headers,
+        },
+      }
+    )
+    console.log(res)
     setChange((prev) => !prev)
   }
 
   return (
     <div className={classes.root}>
-      {/* {notesArray.map((value) => (
-        <Notecard details={value} />
-      ))} */}
       <div
         className={classes.background}
         style={{ width: '100vw', justifyContent: 'center', display: 'flex' }}
@@ -155,6 +162,11 @@ export default function Notes() {
           />
         ))}
       </div>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert id='success' onClose={handleClose} severity={severityState}>
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
@@ -10,6 +10,9 @@ import TextField from '@material-ui/core/TextField'
 import DeleteIcon from '@material-ui/icons/Delete'
 import SaveIcon from '@material-ui/icons/Save'
 import EditIcon from '@material-ui/icons/Edit'
+import { Alert } from '@material-ui/lab'
+import { Snackbar } from '@material-ui/core'
+import { MuiAlert } from '@material-ui/lab'
 
 let counter = 0
 let count = [
@@ -26,7 +29,7 @@ const useStyles = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    marginTop: '0.5vw',
+    marginTop: '1.5vw',
     marginLeft: '1vw',
   },
   bullet: {
@@ -64,6 +67,21 @@ export default function Notecard(props) {
   const [edit, setEdit] = React.useState(false)
   const [titleNote, setTitleNote] = React.useState('')
   const [taskNote, setTaskNote] = React.useState('')
+  const [error, setError] = React.useState('')
+  const [open, setOpen] = React.useState(false)
+  const [severityState, setSeverityState] = React.useState('')
+
+  const handleClick = () => {
+    setOpen(true)
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpen(false)
+  }
 
   const titleNoteChange = (e) => {
     setTitleNote(e.target.value)
@@ -74,37 +92,6 @@ export default function Notecard(props) {
     console.log(taskNote)
   }
 
-  // const titleNoteChange = (e) => {
-  //   setTitleNote(e.target.value)
-  //   console.log(titleNote)
-  // }
-  // const taskNoteChange = (e) => {
-  //   setTaskNote(e.target.value)
-  //   console.log(taskNote)
-  // }
-
-  // const handleCreateNote = async (e) => {
-  //   console.log('changes saved successfully')
-  //   const res = await axios.post('http://localhost:5000/notes/createNote', {
-  //     title: titleNote,
-  //     task: taskNote,
-  //   })
-  // }
-
-  // const handleEditNote = async (e) => {
-  //   const res = await axios.post('http://localhost:5000/notes/editNote', {
-  //     title: titleNote,
-  //     task: taskNote,
-  //   })
-  // }
-
-  // const handleDeleteNote = async (e) => {
-  //   console.log('note deleted successfully')
-  //   const res = await axios.post('http://localhost:5000/notes/deleteNote', {
-  //     title: titleNote,
-  //     task: taskNote,
-  //   })
-  // }
   const handleNewNotecard = () => {
     setNewNotecard(!newNotecard)
 
@@ -131,7 +118,7 @@ export default function Notecard(props) {
   const headers = window.localStorage.getItem('token')
 
   const handleEditNotecard = async (title, task, id) => {
-    console.log(props.id)
+    console.log('hey')
     const res = await axios.post(
       'http://localhost:5000/notes/editNote',
       {
@@ -148,6 +135,18 @@ export default function Notecard(props) {
       }
     )
     console.log(res)
+    if (res.data.error) {
+      setSeverityState('warning')
+      setError(res.data.error)
+      handleClick()
+      setOpen(true)
+    } else {
+      setSeverityState('success')
+      setError('saved succesfuly')
+      handleClick()
+      setOpen(true)
+    }
+
     setEdit(false)
   }
   return (
@@ -196,7 +195,7 @@ export default function Notecard(props) {
                             setTask('')
                             setTitle('')
                           } else {
-                            handleEditNotecard(title, task, id)
+                            handleEditNotecard(title, task, props.id)
                             setTask(task)
                             setTitle(title)
                             setId(id)
@@ -255,6 +254,11 @@ export default function Notecard(props) {
           </>
         )
       })}
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severityState}>
+          {error}
+        </Alert>
+      </Snackbar>
     </List>
   )
 }
