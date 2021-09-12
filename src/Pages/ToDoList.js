@@ -1,50 +1,65 @@
-import React, {useEffect, useState} from "react";
-import {Redirect} from 'react-router-dom';
-import AddListButton from "../Components/ToDoList/AddListButton";
-import ListBox from "../Components/ToDoList/ListBox";
-import Listt from "../Components/ToDoList/Listt";
+import { useEffect } from 'react'
+import React from 'react'
+import AddListButton from '../Components/ToDoList/AddListButton'
+import ListBox from '../Components/ToDoList/ListBox'
+import Listt from '../Components/ToDoList/Listt'
+import axios from 'axios'
+import { makeStyles } from '@material-ui/core/styles'
+import tom from './tomeyaa-03.png'
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
+const useStyles = makeStyles({
+  root: {
+    width: '100vw',
+    height: '150vw',
+    backgroundImage: `url(${tom})`,
+  },
+})
 export default function ToDoList() {
-  const [id, setId] = React.useState(0);
-  const [arrayOfTodo, setArrayOfTodo] = React.useState([]);
+  const classes = useStyles()
+  const [id, setId] = React.useState(0)
+  const [arrayOfTodo, setArrayOfTodo] = React.useState([])
   const [selected, setSelected] = React.useState({
-    id: 0,
-    title: "",
-    list: [],
-  });
-  const [edit, setEdit] = React.useState(false);
-  const [index, setIndex] = React.useState(100);
-  const [redirect, setRedirect] = React.useState(false);
+    //_id:0,
+    title: '',
+    tasks: [],
+  })
 
   const history = useHistory()
 
-  console.log(window.localStorage,"dsfsdfsf");
-  const headers = window.localStorage.getItem("token");
-  useEffect(() => {
-    console.log(window.localStorage,"dsfsdfsf");
-    if(window.localStorage.getItem('token')== 'undefined'){
-      setRedirect(true);
-      console.log("its null")
-      history.push('/signin')
-      // {<Redirect to = "/signin"/>}
-    }
-    console.log(window.localStorage.getItem("token"))
-  //   axios.post('http://localhost:5000/lists/viewListNames',{},
-  //   {headers : {token:headers}}
-  //   )
-  // .then((res) => setArrayOfTodo(res.data.records))
-  // .catch((error) => {
-  //   console.log(error)
-  // }
-  // )
-},[])
-console.log(arrayOfTodo, 'ballalalala');
-  console.log(window.localStorage.getItem("token"))
+  // useEffect(() => {
+  //   console.log(window.localStorage,"dsfsdfsf");
+  //   if(window.localStorage.getItem('token')== 'undefined'){
+  //     console.log("its null")
+  //     history.push('/')
+  //   }
+  // },[])
 
+
+  const headers = window.localStorage.getItem('token')
+  useEffect(async () => {
+    await axios
+      .post(
+        'http://localhost:5000/lists/viewListNames',
+        {},
+
+        { headers: { token: headers } }
+      )
+      .then((res) => setArrayOfTodo(res.data))
+      .catch((error) => {
+        console.log(error)
+      })
+      if(window.localStorage.getItem('token')== 'undefined'){
+        console.log("its null")
+        history.push('/')
+      }
+  }, [id])
+
+  // console.log(arrayOfTodo, "ballalalala");
+  // console.log(window.localStorage.getItem("token"));
+  const [index, setIndex] = React.useState(100)
   return (
-    <div>
-      <AddListButton setSelected={setSelected}  setIndex={setIndex}/>
+    <div className={classes.root}>
+      <AddListButton setSelected={setSelected} setIndex={setIndex} />
 
       <Listt
         arrayOfTodo={arrayOfTodo}
@@ -61,10 +76,9 @@ console.log(arrayOfTodo, 'ballalalala');
         setArrayOfTodo={setArrayOfTodo}
         setSelected={setSelected}
         selected={selected}
-        edit={edit}
         setIndex={setIndex}
         index={index}
       />
     </div>
-  );
+  )
 }

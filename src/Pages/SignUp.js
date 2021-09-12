@@ -14,21 +14,22 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
+import { useHistory } from 'react-router'
 import axios from 'axios';  
     import Snackbar from '@material-ui/core/Snackbar';
     import MuiAlert from '@material-ui/lab/Alert';
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright ©️ "}
-      <Link color="inherit" href="https://material-ui.com/">
+    <Typography variant='body2' color='textSecondary' align='center'>
+      {'Copyright ©️ '}
+      <Link color='inherit' href='https://material-ui.com/'>
         Your Website
-      </Link>{" "}
+      </Link>{' '}
       {new Date().getFullYear()}
-      {"."}
+      {'.'}
     </Typography>
-  );
+  )
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -40,196 +41,194 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+}))
 
+export default function SignUp() {
+  const [email, setEmail] = useState('')
+  const [firstName, setfName] = useState('')
+  const [password, setPassword] = useState('')
+  const [lastName, setlName] = useState('')
+  const [errorMessage, setError] = useState('')
+  const [sign, setsign] = useState(false)
 
-  export default function SignUp() {
-    
-    const [email, setEmail] = useState('');
-    const [firstName, setfName] = useState('');
-    const [password, setPassword] = useState('');
-    const [lastName, setlName] = useState('');
-    const [errorMessage, setError] = useState('');
+  const classes = useStyles()
+  const [open, setOpen] = React.useState(false)
 
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-  
-    const handleClick = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-  
-      setOpen(false);
-    };
+  const handleClick = () => {
+    setOpen(true)
+  }
 
-    const emailChange = (e) =>{
-      setEmail(e.target.value);
-      console.log(email)
+  // useEffect(() => {
+  //   window.location('/')
+  // }, [sign])
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
     }
 
-    const passwordChange = (e) =>{
-      setPassword(e.target.value);
-      console.log(password);
-    } 
+    setOpen(false)
+  }
 
-    const fnameChange = (e) =>{
-      setfName(e.target.value);
-      console.log(firstName);
-    } 
+  const emailChange = (e) => {
+    setEmail(e.target.value)
+    console.log(email)
+  }
 
-    const lnameChange = (e) =>{
-      setlName(e.target.value);
-      console.log(lastName);
-    } 
+  const passwordChange = (e) => {
+    setPassword(e.target.value)
+    console.log(password)
+  }
 
-    console.log(window.localStorage ,'dasasd');
+  const fnameChange = (e) => {
+    setfName(e.target.value)
+    console.log(firstName)
+  }
 
-    const handleSignup = async (e) => {
-      console.log(password);
-      console.log(email);
-      e.preventDefault();
-      axios.post('http://localhost:5000/account/signup', {
+  const lnameChange = (e) => {
+    setlName(e.target.value)
+    console.log(lastName)
+  }
+
+  const history = useHistory()
+
+  console.log(window.localStorage, 'dasasd')
+
+  const handleSignup = async (e) => {
+    console.log(password)
+    console.log(email)
+    e.preventDefault()
+    axios
+      .post('http://localhost:5000/account/signup', {
         email: email,
         password: password,
         lastName: lastName,
-        firstName: firstName
-      }).then(res => {
+        firstName: firstName,
+      })
+      .then((res) => {
         console.log(res)
-        if(res.data.message){
+        if (res.data.message) {
           setError(res.data.message)
-          setOpen(true);
-          // window.location = "/signin";
-        }
-        if(res.data.error){
+          setOpen(true)
+          setsign(true)
+        } 
+
+        if (res.data.error) {
           setError(res.data.error)
           handleClick()
-          setOpen(true);
+          setOpen(true)
+          setsign(true)
         }
-      }).catch(err => {
+        else {
+          history.push('/')
+        }
+      })
+
+      .catch((err) => {
         console.log(err)
       })
-      
-    
-    }
-    
-//   axios.post('http://localhost:5000/account/signup', {
-//     email: email,
-//     password: password
-//   }).then(res => {
-//     console.log(res)
-//   }).catch(err => {
-//     console.log(err)
-//   })
-// },[])
+  }
 
-    
   
-  // const classes = useStyles();
-
-
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component='main' maxWidth='xs'>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component='h1' variant='h5'>
           Sign up
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
+                autoComplete='fname'
+                name='firstName'
+                variant='outlined'
                 required
-                onChange = {fnameChange}
+                onChange={fnameChange}
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id='firstName'
+                label='First Name'
                 autoFocus
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                variant="outlined"
+                variant='outlined'
                 required
-                onChange = {lnameChange}
+                onChange={lnameChange}
                 fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
+                id='lastName'
+                label='Last Name'
+                name='lastName'
+                autoComplete='lname'
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
+                variant='outlined'
                 required
                 fullWidth
-                id="email"
-                value =  {email}
+                id='email'
+                value={email}
                 onChange={emailChange}
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                label='Email Address'
+                name='email'
+                autoComplete='email'
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
+                variant='outlined'
                 required
                 fullWidth
-                value =  {password}
+                value={password}
                 onChange={passwordChange}
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
+                name='password'
+                label='Password'
+                type='password'
+                id='password'
+                autoComplete='current-password'
               />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+                control={<Checkbox value='allowExtraEmails' color='primary' />}
+                label='I want to receive inspiration, marketing promotions and updates via email.'
               />
             </Grid>
           </Grid>
           <Button
-            type="submit"
+            type='submit'
             fullWidth
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             className={classes.submit}
             onClick={handleSignup}
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent='flex-end'>
             <Grid item>
-              <Link href="/" variant="body2">
+              <Link href='/' variant='body2'>
                 Already have an account? Sign in
               </Link>
             </Grid>
@@ -240,13 +239,10 @@ const useStyles = makeStyles((theme) => ({
         <Copyright />
       </Box>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-      <Alert onClose={handleClose}  severity="error">{errorMessage}</Alert>
+        <Alert onClose={handleClose} severity='error'>
+          {errorMessage}
+        </Alert>
       </Snackbar>
     </Container>
-  );
-
-
-
-
+  )
 }
-
